@@ -4,6 +4,8 @@
  *  pagina 278 in het boek
  *  pagina 278 in het boekt geeft aan welke instrcutie nodig zijn + andere instructies in appendix C
  *  '?' of 'x' zijn don't care's in het systeem.
+ *
+ * Unconditional Branch toegevoegd! alleen hoog bij BOPCODE.
  */
 
 // D-Type
@@ -22,7 +24,7 @@
 `define LSROPCODE  11'b11010011010
 `define BOPCODE    11'b000101?????
 
-module Control(OPCode, Reg2Loc, Branch, MemRead, MemToReg, ALUOP, MemWrite, ALUSrc, RegWrite);
+module Control(OPCode, Reg2Loc, Branch, UnconBranch, MemRead, MemToReg, ALUOP, MemWrite, ALUSrc, RegWrite);
 
 input [10:0] OPCode;                        //11bit OPCode zijn de 11 MSB van de instruction Code
 
@@ -37,7 +39,7 @@ output MemWrite;
 output ALUSrc;
 output RegWrite;
 
-reg Reg2Loc, Branch, MemRead, MemToReg, MemWrite, ALUSrc, RegWrite;
+reg Reg2Loc, Branch, UnconBranch, MemRead, MemToReg, ALUOP, MemWrite, ALUSrc, RegWrite;
 
 always @ (*)
 begin
@@ -51,6 +53,7 @@ begin
                 MemRead     =  1'b1;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b00;                       
             end
 	    `STUROPCODE: 
@@ -62,6 +65,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b1;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b00;       
             end
         `CBZOPCODE:                         // ALUOP[01] B-type (CBZ)
@@ -73,6 +77,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b1;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b01;
             end
 	    `ADDOPCODE:                         // ALUOP[10] R-types (AND & OR & ...)  
@@ -84,6 +89,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b10;
             end
 	    `SUBOPCODE: 
@@ -95,6 +101,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b10;
             end
 	    `ANDOPCODE: 
@@ -106,6 +113,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b10;
             end
 	    `ORROPCODE: 
@@ -117,6 +125,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b10;
             end
 	    `BOPCODE: 
@@ -128,6 +137,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b1;
                 ALUOP       =  2'b10;
             end 
 	    `LSROPCODE: 
@@ -139,6 +149,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b10;
             end 
         `LSLOPCODE: 
@@ -150,6 +161,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b10;
             end   
         default:                                //RESET! alles op X
@@ -161,6 +173,7 @@ begin
                 MemRead     =  1'b0;
                 MemWrite    =  1'b0;
                 Branch      =  1'b0;
+                UnconBranch =  1'b0;
                 ALUOP       =  2'b00;
            end
         endcase       
