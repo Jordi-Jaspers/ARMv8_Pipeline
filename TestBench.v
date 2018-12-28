@@ -29,7 +29,7 @@ module TestBench;
     reg Rst;
     reg [63:0] startPC;
     reg [7:0] passed;
-    reg [15:0] Counter;
+    reg [15:0] counter;
 
 	// Outputs -- zie Pipeline.v
 	wire [63:0] dMemOut;
@@ -89,7 +89,7 @@ module TestBench;
     end
     always
     begin
-        #30 CLK = ~CLK;
+        #30 Clk = ~Clk;
         counter = counter + 1;
     end
 

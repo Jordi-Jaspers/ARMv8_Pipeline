@@ -38,8 +38,9 @@ output MemToReg;
 output MemWrite;
 output ALUSrc;
 output RegWrite;
+output UnconBranch;
 
-reg Reg2Loc, Branch, UnconBranch, MemRead, MemToReg, ALUOP, MemWrite, ALUSrc, RegWrite;
+reg Reg2Loc, Branch, UnconBranch, MemRead, MemToReg, MemWrite, ALUSrc, RegWrite;
 
 always @ (*)
 begin

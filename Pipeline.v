@@ -65,7 +65,7 @@ module Pipeline(Clk, Rst, startPC, FetchedPC, dMemOut);
 	reg ALUZero4;
 	reg [63:0] Out2_4;
 	reg [4:0] Rd4;
-	reg MemToReg4, RegWrite4, MemRead4, MemWrite4, Branch4, Uncondbranch4;
+	reg MemToReg4, RegWrite4, MemRead4, MemWrite4, Branch4, Unconbranch4;
 	
 	/* Stage 4 - MEM Connections */
 	wire [63:0] MemReadBus;
@@ -161,12 +161,12 @@ module Pipeline(Clk, Rst, startPC, FetchedPC, dMemOut);
 			MemRead3 = 1'b0;
 			MemWrite3 = 1'b0;
 			Branch3 = 1'b0;
-			Uncondbranch3 = 1'b0;
+			Unconbranch3 = 1'b0;
 			ALUOp3 = 2'b00;
 	        currentPC3 = 64'b0;
-	        BusA3 = 64'd0;
-	        BusB3 = 64'd0;
-	        SignExtendedImm3 = 64'd0;
+	        Out1_3 = 64'd0;
+	        Out2_3 = 64'd0;
+	        SignExt3 = 64'd0;
 	        Opcode3 = 10'b0;
 	        Rd3 = 5'b0; 
 		end
@@ -178,12 +178,12 @@ module Pipeline(Clk, Rst, startPC, FetchedPC, dMemOut);
 			MemRead3 = MemRead;
 			MemWrite3 = MemWrite;
 			Branch3 = Branch;
-			Uncondbranch3 = Unconbranch;
+			Unconbranch3 = Unconbranch;
 			ALUOp3 = ALUOp;
 	        currentPC3 = currentPC2;
 	        Out1_3 = Out1;
 	        Out2_3 = Out2;
-	        SignExtendedImm3 = SignExt;
+	        SignExt3 = SignExt;
 	        Opcode3 = instruction2[31:21];
 	        Rd3 = instruction2[4:0]; 
 		end
@@ -191,9 +191,9 @@ module Pipeline(Clk, Rst, startPC, FetchedPC, dMemOut);
 
     /* Stage 3 - EX Logic */
 	
-	assign shiftedImm = SignExtendedImm3 << 2;  //zoals de PC counter can single cycle, zie scheme single cycle boek p.272
+	assign shiftedImm = SignExt3 << 2;  //zoals de PC counter can single cycle, zie scheme single cycle boek p.272
 	assign branchAddr = currentPC3 + shiftedImm;
-	assign ALUBusB = ALUSrc3 ? SignExtendedImm3 : BusB3;
+	assign ALUBusB = ALUSrc3 ? SignExt3 : Out2_3;
 
 	ALUControl ALUCont(
         .Operation(ALUControlBits), 
@@ -217,14 +217,14 @@ module Pipeline(Clk, Rst, startPC, FetchedPC, dMemOut);
 	        branchAddr4 = 64'b0;
 	        ALUBusW4 = 64'b0;
 	        ALUZero4 = 1'b0;
-	        BusB4 = 63'b0;
+	        Out2_4 = 63'b0;
 	        Rd4 = 5'b0;
 	        MemToReg4 = 1'b0;
 	        RegWrite4 = 1'b0;
 	        MemRead4 = 1'b0;
 	        MemWrite4 = 1'b0;
 	        Branch4 = 1'b0;
-	        Uncondbranch4 = 1'b0;
+	        Unconbranch4 = 1'b0;
 	    end
 	    else
 	    begin
@@ -238,12 +238,12 @@ module Pipeline(Clk, Rst, startPC, FetchedPC, dMemOut);
 	        MemRead4 = MemRead3;
 	        MemWrite4 = MemWrite3;
 	        Branch4 = Branch3;
-	        Uncondbranch4 = Uncondbranch3;
+	        Unconbranch4 = Unconbranch3;
 	    end
 	end
 
     /* Stage 4 - MEM Logic */
-	assign PCSrc = ((ALUZero4 & Branch4) | Uncondbranch4);
+	assign PCSrc = ((ALUZero4 & Branch4) | Unconbranch4);
 
 	DataMemory DMem(
         .ReadData(MemReadBus),
