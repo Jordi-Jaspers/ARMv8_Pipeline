@@ -36,7 +36,7 @@ module TestBench;
 	wire [63:0] FetchedPC;
 	
 	// Instantiate the Unit Under Test (UUT)
-	PipelinedProc uut (
+	Pipeline uut (
 		.Clk(Clk), 
 		.Rst(Rst), 
 		.startPC(startPC), 
@@ -48,13 +48,13 @@ module TestBench;
 
 	initial begin
 		// Initialize Inputs && even wachten dat alles gereset is.
-		Rst = 1'b0;
+		Rst = 1'b1;
 		startPC = 64'b0;
 		passed = 8'b0;
 		counter = 16'b0;
 		#300
 
-		Rst = 1'b1;
+		Rst = 1'b0;
 		
 		$display("Current FetchedPC: 0x%H", FetchedPC);
 		#60
@@ -67,7 +67,7 @@ module TestBench;
 		/* wachten totdat we in de writeback stadium zijn. anders kreeg ik fout addressen. */
 		#240
 
-        passTest(dMemOut, 64'hF, "Results of Program 1", passed);
+        Test(dMemOut, 64'hF, "Results of Program 1", passed);
         while (FetchedPC < 64'h100)
         begin
             #60
@@ -76,9 +76,9 @@ module TestBench;
         
         #240
 
-        passTest(dMemOut, 64'h123456789abcdef0, "Results of Program 2", passed);
+        Test(dMemOut, 64'h123456789abcdef0, "Results of Program 2", passed);
         
-        allPassed(passed, 2);
+        isGeslaagd(passed, 2);
         $finish;
 	end
 	  
