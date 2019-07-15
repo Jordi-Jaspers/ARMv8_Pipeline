@@ -5,7 +5,13 @@ Jordi Jaspers
 28/12/2018  
   
 #ARMv8_Pipeline  
-An Arm V8 processor with pipelining made via the instructions of the ARM-Edition book written by David A. Patterson &amp; John L. Hennesey  
+An Arm V8 processor with pipelining made via the instructions of the ARM-Edition book written by David A. Patterson &amp; John L. Hennesey 
+  
+#What I learned  
+* Advanced verilog & VHDL programming
+* How parallel processing work instead of the regular sequential processing
+* Workings of a processor (Also see Tamarac on my github)
+* Understanding and importance of pipelining with error detection
   
 #DISCLAIMER:  
 All the code that is copied or used from other sources will be mentioned in the reference section of this file.    
